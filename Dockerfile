@@ -13,4 +13,6 @@ COPY --from=build /app /app
 ENV HOST=0.0.0.0
 ENV PORT=8080
 EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s \
+  CMD python3 -c "import socket,os; s=socket.socket(); s.settimeout(2); s.connect(('127.0.0.1', int(os.environ.get('PORT','8080')))); s.close()" || exit 1
 CMD ["python3", "web/server.py"]
